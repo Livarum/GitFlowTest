@@ -23,7 +23,6 @@ class UsersTableSeeder extends Seeder
                 'email' => $faker->unique()->safeEmail,
                 'email_verified_at' => now(),
                 'password' => bcrypt('password'), // You may want to use bcrypt() to hash your passwords
-                'remember_token' => \Str::random(10),
             ]);
         }
     }

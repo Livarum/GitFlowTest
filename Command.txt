@@ -1,0 +1,18 @@
+
+///////////////////////////////////////
+Create controller
+php artisan make:controller AuthController
+Run specific seeder
+php artisan db:seed --class=ProductSeeder
+Create model with all resources
+php artisan make:model Product --all
+
+
+///////////////////////////////////////
+git init
+git add .
+git commit -m "Commit 0"
+git remote add origin https://github.com/Livarum/GitFlowTest.git
+git push -u origin master
+git config --global user.email "alexpersonal0815@gmail.com"
+git config --global user.name "alexram"

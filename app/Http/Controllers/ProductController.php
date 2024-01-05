@@ -13,7 +13,13 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $products = Product::all();
+
+        return response()->json([
+            'message' => 'Data retrieved successfully',
+            'success' => true,
+            'data' => $products,
+        ]);
     }
 
     /**
@@ -21,7 +27,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        // You can implement this method if you need to show a form for creating a new product
     }
 
     /**
@@ -29,7 +35,15 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        $product = Product::create($data);
+
+        return response()->json([
+            'message' => 'Product created successfully',
+            'success' => true,
+            'data' => $product,
+        ]);
     }
 
     /**
@@ -37,7 +51,11 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return response()->json([
+            'message' => 'Product retrieved successfully',
+            'success' => true,
+            'data' => $product,
+        ]);
     }
 
     /**
@@ -45,7 +63,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        // You can implement this method if you need to show a form for editing a specific product
     }
 
     /**
@@ -53,7 +71,15 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        //
+        $data = $request->validated();
+
+        $product->update($data);
+
+        return response()->json([
+            'message' => 'Product updated successfully',
+            'success' => true,
+            'data' => $product,
+        ]);
     }
 
     /**
@@ -61,6 +87,11 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
+
+        return response()->json([
+            'message' => 'Product deleted successfully',
+            'success' => true,
+        ]);
     }
 }
