@@ -6,6 +6,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
 
+use App\Notifications\testNotification;
+use App\Models\User;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -22,12 +25,21 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('register', [AuthController::class, 'register']);
+
 Route::post('login', [AuthController::class, 'login']);
 
+Route::resource('products', ProductController::class);
+
+Route::get('/product-notification', [ProductController::class, 'testNotification']);
+
+Route::get('/preview-notification', function () {
+    $user = User::find(1); // Replace 1 with the actual ID of a user you want to use for testing
+    return (new testNotification())->toMail($user);
+});
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
-    Route::resource('products', ProductController::class);
+   
 });
 
 /* Route::apiResource('users', UserController::class);

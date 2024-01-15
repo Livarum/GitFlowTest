@@ -60,3 +60,11 @@ git push -u origin master
 git config --global user.email "alexpersonal0815@gmail.com"
 git config --global user.name "alexram"
 
+///////////////////////////////////////
+Lista de comandos:
+En el Inicio de Windows escribimos CMD.
+Ejecutamos como administrador y escribimos:
+1- Diskpart
+2- List disk
+3- Select disk (el número del disco que deseamos limpiar)
+4. Clean

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GeneratePdfController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,3 +19,5 @@ Route::get('/', function () {
 });
 // Add the login route here
 Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
+// Add the route for generating PDF
+Route::get('/test-pdf', [GeneratePdfController::class, 'testPdf'])->name('test.pdf');

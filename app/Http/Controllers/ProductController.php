@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Models\Product;
-use App\Http\Requests\StoreProductRequest;
-use App\Http\Requests\UpdateProductRequest;
+use Illuminate\Http\Request;
+
+use App\Notifications\productNotification;
+use App\Http\Controllers\NotificationsCotroller;
 
 class ProductController extends Controller
 {
@@ -15,35 +18,39 @@ class ProductController extends Controller
     {
         $products = Product::all();
 
-        return response()->json([
-            'message' => 'Data retrieved successfully',
-            'success' => true,
-            'data' => $products,
-        ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        // You can implement this method if you need to show a form for creating a new product
+        return response()
+            ->json([
+                'success' => true,
+                'message' => 'Products retrieved successfully.',
+                'data'    => $products,
+            ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProductRequest $request)
+    public function store(Request $request)
     {
-        $data = $request->validated();
-
-        $product = Product::create($data);
-
-        return response()->json([
-            'message' => 'Product created successfully',
-            'success' => true,
-            'data' => $product,
+        $request->validate([
+            'name'        => 'required|string',
+            'description' => 'required|string',
+            'price'       => 'required|numeric',
+            // Add other validation rules as needed
         ]);
+
+        $product = Product::create([
+            'name'        => $request->input('name'),
+            'description' => $request->input('description'),
+            'price'       => $request->input('price'),
+            // Add other fields as needed
+        ]);
+
+        return response()
+            ->json([
+                'success' => true,
+                'message' => 'Product created successfully.',
+                'data'    => $product,
+            ]);
     }
 
     /**
@@ -51,35 +58,34 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return response()->json([
-            'message' => 'Product retrieved successfully',
-            'success' => true,
-            'data' => $product,
-        ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $product)
-    {
-        // You can implement this method if you need to show a form for editing a specific product
+        return response()
+            ->json([
+                'success' => true,
+                'message' => 'Product retrieved successfully.',
+                'data'    => $product,
+            ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductRequest $request, Product $product)
+    public function update(Request $request, Product $product)
     {
-        $data = $request->validated();
-
-        $product->update($data);
-
-        return response()->json([
-            'message' => 'Product updated successfully',
-            'success' => true,
-            'data' => $product,
+        $request->validate([
+            'name'        => 'string',
+            'description' => 'string',
+            'price'       => 'numeric',
+            // Add other validation rules as needed
         ]);
+
+        $product->update($request->all());
+
+        return response()
+            ->json([
+                'success' => true,
+                'message' => 'Product updated successfully.',
+                'data'    => $product,
+            ]);
     }
 
     /**
@@ -89,9 +95,38 @@ class ProductController extends Controller
     {
         $product->delete();
 
-        return response()->json([
-            'message' => 'Product deleted successfully',
-            'success' => true,
-        ]);
+        return response()
+            ->json([
+                'success' => true,
+                'message' => 'Product deleted successfully.',
+                'data'    => '',
+            ]);
+    }
+
+    
+
+    public function testNotification()
+    {
+        // For simplicity, you can hardcode data for the new product
+        $data = [
+            'name'        => 'Test Product',
+            'description' => 'This is a test product.',
+            'price'       => 19.99,
+            // Add other fields as needed
+        ];
+
+        // Create the product
+        $product = Product::create($data);
+
+        // Notify
+        $notificacion = new NotificationsCotroller;
+        $notificacion->notifyProductCreated($product);
+        
+        return response()
+            ->json([
+                'success' => true,
+                'message' => 'Test notification sent successfully.',
+                'data'    => $product,
+            ]);
     }
 }
