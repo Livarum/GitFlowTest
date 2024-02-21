@@ -32,6 +32,8 @@ Route::resource('products', ProductController::class);
 
 Route::get('/product-notification', [ProductController::class, 'testNotification']);
 
+Route::apiResource('users', UserController::class);
+
 Route::get('/preview-notification', function () {
     $user = User::find(1); // Replace 1 with the actual ID of a user you want to use for testing
     return (new testNotification())->toMail($user);

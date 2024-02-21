@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GeneratePdfController;
+use Laravel\Telescope\Telescope;
 
 /*
 |--------------------------------------------------------------------------
@@ -9,15 +10,12 @@ use App\Http\Controllers\GeneratePdfController;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
+| routes are loaded by the RouteServiceProvider and will be assigned to
+| the "web" middleware group. Now create something great!
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-// Add the login route here
-Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
-// Add the route for generating PDF
+// Your existing routes...
+
+// Route for generating PDF
 Route::get('/test-pdf', [GeneratePdfController::class, 'testPdf'])->name('test.pdf');

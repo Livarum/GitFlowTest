@@ -6,8 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
-use App\Notifications\productNotification;
-use App\Http\Controllers\NotificationsCotroller;
+use App\Http\Requests\ProductRequest;
 
 class ProductController extends Controller
 {
@@ -18,39 +17,26 @@ class ProductController extends Controller
     {
         $products = Product::all();
 
-        return response()
-            ->json([
-                'success' => true,
-                'message' => 'Products retrieved successfully.',
-                'data'    => $products,
-            ]);
+        return response()->json([
+            'success' => true,
+            'message' => 'Products retrieved successfully.',
+            'data'    => $products,
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $request->validate([
-            'name'        => 'required|string',
-            'description' => 'required|string',
-            'price'       => 'required|numeric',
-            // Add other validation rules as needed
+        $validatedData = $request->validated();
+        $product = Product::create($validatedData);
+    
+        return response()->json([
+            'success' => true,
+            'message' => 'Product created successfully.',
+            'data' => $product,
         ]);
-
-        $product = Product::create([
-            'name'        => $request->input('name'),
-            'description' => $request->input('description'),
-            'price'       => $request->input('price'),
-            // Add other fields as needed
-        ]);
-
-        return response()
-            ->json([
-                'success' => true,
-                'message' => 'Product created successfully.',
-                'data'    => $product,
-            ]);
     }
 
     /**
@@ -58,34 +44,26 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return response()
-            ->json([
-                'success' => true,
-                'message' => 'Product retrieved successfully.',
-                'data'    => $product,
-            ]);
+        return response()->json([
+            'success' => true,
+            'message' => 'Product retrieved successfully.',
+            'data'    => $product,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductRequest $request, Product $product)
     {
-        $request->validate([
-            'name'        => 'string',
-            'description' => 'string',
-            'price'       => 'numeric',
-            // Add other validation rules as needed
+        $validatedData = $request->validated();
+        $product->update($validatedData);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Product updated successfully.',
+            'data'    => $product,
         ]);
-
-        $product->update($request->all());
-
-        return response()
-            ->json([
-                'success' => true,
-                'message' => 'Product updated successfully.',
-                'data'    => $product,
-            ]);
     }
 
     /**
@@ -95,38 +73,10 @@ class ProductController extends Controller
     {
         $product->delete();
 
-        return response()
-            ->json([
-                'success' => true,
-                'message' => 'Product deleted successfully.',
-                'data'    => '',
-            ]);
-    }
-
-    
-
-    public function testNotification()
-    {
-        // For simplicity, you can hardcode data for the new product
-        $data = [
-            'name'        => 'Test Product',
-            'description' => 'This is a test product.',
-            'price'       => 19.99,
-            // Add other fields as needed
-        ];
-
-        // Create the product
-        $product = Product::create($data);
-
-        // Notify
-        $notificacion = new NotificationsCotroller;
-        $notificacion->notifyProductCreated($product);
-        
-        return response()
-            ->json([
-                'success' => true,
-                'message' => 'Test notification sent successfully.',
-                'data'    => $product,
-            ]);
+        return response()->json([
+            'success' => true,
+            'message' => 'Product deleted successfully.',
+            'data'    => '',
+        ]);
     }
 }
